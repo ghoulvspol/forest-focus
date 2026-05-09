@@ -1,6 +1,0 @@
-<!-- pages/interact/interact.wxml — 预留页，当前交互在主页处理 -->
-<view class="page-container">
-  <view class="empty-wrap">
-    <text>交互入口在主页～</text>
-  </view>
-</view>
