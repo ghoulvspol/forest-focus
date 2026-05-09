@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1920px; height: 1080px; overflow: hidden;
+    background: #FFFFFF;
+    font-family: -apple-system, "SF Pro Display", "PingFang SC", "Helvetica Neue", sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .section-label {
+    font-size: 15px;
+    font-weight: 600;
+    color: #FF6900;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .section-title {
+    font-size: 80px;
+    font-weight: 700;
+    color: #1D1D1F;
+    letter-spacing: -2px;
+    text-align: center;
+    line-height: 1.1;
+    margin-bottom: 12px;
+  }
+  .section-subtitle {
+    font-size: 24px;
+    font-weight: 400;
+    color: #86868B;
+    text-align: center;
+    margin-bottom: 72px;
+    letter-spacing: 0.5px;
+  }
+
+  /* 性能数据卡片 */
+  .stats-row {
+    display: flex;
+    gap: 48px;
+    align-items: flex-start;
+  }
+  .stat-card {
+    width: 280px;
+    text-align: center;
+    padding: 40px 24px;
+    border-radius: 24px;
+    background: #FBFBFD;
+    border: 1px solid rgba(0,0,0,0.04);
+  }
+  .stat-number {
+    font-size: 64px;
+    font-weight: 700;
+    color: #1D1D1F;
+    letter-spacing: -2px;
+    line-height: 1;
+  }
+  .stat-unit {
+    font-size: 24px;
+    font-weight: 400;
+    color: #FF6900;
+  }
+  .stat-desc {
+    font-size: 16px;
+    font-weight: 500;
+    color: #86868B;
+    margin-top: 12px;
+    letter-spacing: 0.3px;
+  }
+  .stat-detail {
+    font-size: 13px;
+    font-weight: 400;
+    color: #AEAEB2;
+    margin-top: 6px;
+  }
+
+  /* 核心芯片高亮 */
+  .chip-highlight {
+    margin-top: 56px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 36px;
+    border-radius: 100px;
+    background: linear-gradient(135deg, #FF6900 0%, #FF8C38 100%);
+  }
+  .chip-highlight-text {
+    font-size: 18px;
+    font-weight: 600;
+    color: #FFFFFF;
+    letter-spacing: 0.5px;
+  }
+
+  /* 背景几何装饰 */
+  .bg-line {
+    position: absolute;
+    width: 1px;
+    height: 100%;
+    background: rgba(0,0,0,0.03);
+    top: 0;
+  }
+  .bg-line:nth-child(1) { left: 20%; }
+  .bg-line:nth-child(2) { left: 40%; }
+  .bg-line:nth-child(3) { left: 60%; }
+  .bg-line:nth-child(4) { left: 80%; }
+</style>
+</head>
+<body>
+  <div class="bg-line"></div>
+  <div class="bg-line"></div>
+  <div class="bg-line"></div>
+  <div class="bg-line"></div>
+
+  <div class="section-label">Performance</div>
+  <h2 class="section-title">性能，全面进化</h2>
+  <p class="section-subtitle">第二代骁龙 8 旗舰平台，台积电 3nm 工艺</p>
+
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-number">3.3<span class="stat-unit">GHz</span></div>
+      <div class="stat-desc">超大核主频</div>
+      <div class="stat-detail">Cortex-X4</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">16<span class="stat-unit">GB</span></div>
+      <div class="stat-desc">运行内存</div>
+      <div class="stat-detail">LPDDR5X</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">1<span class="stat-unit">TB</span></div>
+      <div class="stat-desc">存储空间</div>
+      <div class="stat-detail">UFS 4.0</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">5300<span class="stat-unit">mAh</span></div>
+      <div class="stat-desc">硅碳电池</div>
+      <div class="stat-detail">90W 有线 + 50W 无线</div>
+    </div>
+  </div>
+
+  <div class="chip-highlight">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" fill="#fff"/>
+    </svg>
+    <span class="chip-highlight-text">Snapdragon 8 Elite · 台积电 N3E 工艺</span>
+  </div>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!-- pages/upload/upload.wxml — 宠物照片上传 + AI 风格化 -->
+<view class="page-container">
+
+  <!-- 步骤指示器 -->
+  <view class="steps">
+    <view class="step {{step >= 1 ? 'active' : ''}}">
+      <view class="step-dot">1</view>
+      <text>上传照片</text>
+    </view>
+    <view class="step-line"></view>
+    <view class="step {{step >= 2 ? 'active' : ''}}">
+      <view class="step-dot">2</view>
+      <text>选择造型</text>
+    </view>
+    <view class="step-line"></view>
+    <view class="step {{step >= 3 ? 'active' : ''}}">
+      <view class="step-dot">3</view>
+      <text>给宠物起名</text>
+    </view>
+  </view>
+
+  <!-- Step 1：选择 / 预览照片 -->
+  <view wx:if="{{step === 1}}" class="card">
+    <view class="upload-hint">上传你宠物的正面照，AI 会生成专属数字分身</view>
+
+    <!-- 未选择 -->
+    <view wx:if="{{!previewUrl}}" class="upload-area" bindtap="choosePhoto">
+      <image src="/images/upload-placeholder.png" style="width:120rpx;height:120rpx;" />
+      <text class="upload-area-text">点击选择照片</text>
+      <text class="upload-area-sub">支持 JPG / PNG，最大 10MB</text>
+    </view>
+
+    <!-- 已选择预览 -->
+    <view wx:else class="preview-wrap">
+      <image src="{{previewUrl}}" class="preview-img" mode="aspectFill" />
+      <button class="btn-outline reselect-btn" bindtap="choosePhoto">重新选择</button>
+    </view>
+
+    <view class="form-item">
+      <text class="form-label">宠物种类</text>
+      <picker mode="selector" range="{{speciesOptions}}" value="{{speciesIndex}}"
+              bindchange="onSpeciesChange">
+        <view class="picker-display">{{speciesOptions[speciesIndex]}}</view>
+      </picker>
+    </view>
+
+    <button
+      class="btn-primary {{!previewUrl || uploading ? 'disabled' : ''}}"
+      disabled="{{!previewUrl || uploading}}"
+      bindtap="uploadAndGenerate"
+    >
+      <text wx:if="{{!uploading}}">生成数字分身</text>
+      <view wx:else class="btn-loading">
+        <image src="/images/loading-white.gif" style="width:32rpx;height:32rpx;margin-right:12rpx;" />
+        <text>{{uploadStatus}}</text>
+      </view>
+    </button>
+
+    <!-- 超时错误提示 -->
+    <view wx:if="{{uploadError}}" class="error-banner">
+      <text>{{uploadError}}</text>
+      <button class="btn-outline error-retry" bindtap="uploadAndGenerate">重试</button>
+    </view>
+  </view>
+
+  <!-- Step 2：选择 AI 风格 -->
+  <view wx:if="{{step === 2}}" class="card">
+    <view class="upload-hint">选择你喜欢的造型风格</view>
+    <view class="style-grid">
+      <view
+        wx:for="{{styleOptions}}"
+        wx:key="style"
+        class="style-item {{selectedStyle === item.style ? 'selected' : ''}}"
+        bindtap="selectStyle"
+        data-style="{{item.style}}"
+      >
+        <image src="{{item.url}}" class="style-preview" mode="aspectFill" />
+        <text class="style-name">{{item.label}}</text>
+        <view wx:if="{{selectedStyle === item.style}}" class="style-check">✓</view>
+      </view>
+    </view>
+    <button
+      class="btn-primary {{!selectedStyle ? 'disabled' : ''}}"
+      disabled="{{!selectedStyle}}"
+      bindtap="confirmStyle"
+    >确认造型</button>
+  </view>
+
+  <!-- Step 3：给宠物起名 -->
+  <view wx:if="{{step === 3}}" class="card">
+    <view class="upload-hint">最后一步，给你的宠物起个名字吧 🐾</view>
+    <view class="avatar-confirm-wrap">
+      <image src="{{confirmedStyleUrl}}" class="avatar-confirm" mode="aspectFill" />
+    </view>
+    <view class="form-item">
+      <text class="form-label">宠物名字</text>
+      <input
+        class="name-input"
+        placeholder="最多 8 个字"
+        maxlength="8"
+        value="{{petName}}"
+        bindinput="onNameInput"
+      />
+    </view>
+    <button
+      class="btn-primary {{!petName.trim() || creating ? 'disabled' : ''}}"
+      disabled="{{!petName.trim() || creating}}"
+      bindtap="createPet"
+    >
+      <text wx:if="{{!creating}}">开始养宠！</text>
+      <text wx:else>创建中...</text>
+    </button>
+  </view>
+
+</view>

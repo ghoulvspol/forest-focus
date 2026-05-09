@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>中东国际物流保障险需求分析平台</title>
+  <link rel="stylesheet" href="css/style.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══════════════════════════════════════════════════ -->
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-icon">
+        <i class="fas fa-ship"></i>
+      </div>
+      <div class="logo-text">
+        <h1>中东国际物流保障险</h1>
+        <p>需求分析平台 &nbsp;·&nbsp; Middle East Logistics Insurance Analytics</p>
+      </div>
+    </div>
+
+    <div class="risk-alert-bar">
+      <span class="risk-alert-label">⚡ 实时风险</span>
+      <span id="riskAlertText" class="risk-alert-text"></span>
+    </div>
+
+    <div class="header-time">
+      <div id="currentDate"></div>
+      <div id="currentTime"></div>
+    </div>
+  </div>
+</header>
+
+<!-- ═══ NAVIGATION TABS ══════════════════════════════════════════ -->
+<nav class="nav-tabs">
+  <div class="nav-tabs-inner">
+    <button class="tab-btn" data-tab="overview">
+      <i class="fas fa-chart-line"></i> 概览
+    </button>
+    <button class="tab-btn" data-tab="logistics">
+      <i class="fas fa-route"></i> 物流追踪
+    </button>
+    <button class="tab-btn" data-tab="insurance">
+      <i class="fas fa-file-contract"></i> 保险查询
+    </button>
+    <button class="tab-btn" data-tab="riskmap">
+      <i class="fas fa-map-marked-alt"></i> 风险地图
+    </button>
+  </div>
+</nav>
+
+<!-- ═══ MAIN CONTENT ═════════════════════════════════════════════ -->
+<main>
+
+  <!-- ─── TAB 1: OVERVIEW ──────────────────────────────────────── -->
+  <div class="tab-pane" id="tab-overview">
+
+    <!-- KPI Cards -->
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <i class="fas fa-globe-asia kpi-icon"></i>
+        <div class="kpi-label"><i class="fas fa-chart-bar"></i> 市场规模</div>
+        <div class="kpi-value" id="kpiMarket">—</div>
+        <div class="kpi-sub">十亿美元 · 2025年预测</div>
+      </div>
+      <div class="kpi-card">
+        <i class="fas fa-arrow-trend-up kpi-icon"></i>
+        <div class="kpi-label"><i class="fas fa-chart-line"></i> 年增长率</div>
+        <div class="kpi-value" id="kpiGrowth">—</div>
+        <div class="kpi-sub">同比 2024 增长</div>
+      </div>
+      <div class="kpi-card">
+        <i class="fas fa-hand-holding-usd kpi-icon"></i>
+        <div class="kpi-label"><i class="fas fa-balance-scale"></i> 综合赔付率</div>
+        <div class="kpi-value" id="kpiClaim">—</div>
+        <div class="kpi-sub">中东地区平均</div>
+      </div>
+      <div class="kpi-card">
+        <i class="fas fa-shield-halved kpi-icon"></i>
+        <div class="kpi-label"><i class="fas fa-shield-alt"></i> 整体承保率</div>
+        <div class="kpi-value" id="kpiCoverage">—</div>
+        <div class="kpi-sub">在途货物覆盖</div>
+      </div>
+    </div>
+
+    <!-- Charts Row 1: Line + Doughnut -->
+    <div class="charts-row">
+      <div class="card">
+        <div class="card-title"><i class="fas fa-chart-line"></i> 中东物流险保费规模趋势（2020–2025）</div>
+        <div class="chart-container">
+          <canvas id="premiumChart"></canvas>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title"><i class="fas fa-chart-pie"></i> 险种分布</div>
+        <div class="chart-container">
+          <canvas id="typeChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Charts Row 2: Bar -->
+    <div class="card">
+      <div class="card-title"><i class="fas fa-chart-bar"></i> 各国/地区保险渗透率对比（%）</div>
+      <div class="chart-container" style="height:220px;">
+        <canvas id="penetrationChart"></canvas>
+      </div>
+    </div>
+
+  </div><!-- /tab-overview -->
+
+
+  <!-- ─── TAB 2: LOGISTICS ──────────────────────────────────────── -->
+  <div class="tab-pane" id="tab-logistics">
+
+    <div class="section-header">
+      <div class="section-icon"><i class="fas fa-route"></i></div>
+      <h2>物流追踪查询</h2>
+    </div>
+
+    <div class="card" style="margin-bottom:16px;">
+      <div class="query-box">
+        <input type="text" id="trackingInput" class="query-input"
+               placeholder="请输入运单号，如 ME20250001"
+               maxlength="12" autocomplete="off" spellcheck="false">
+        <button id="trackingBtn" class="query-btn">
+          <i class="fas fa-search"></i> 查询
+        </button>
+      </div>
+      <div class="query-hint">
+        <i class="fas fa-lightbulb" style="color:var(--gold);margin-right:5px;"></i>
+        快速示例（点击直接查询）：
+      </div>
+      <div class="example-chips" id="trackingExamples"></div>
+    </div>
+
+    <div id="trackingResult"></div>
+
+  </div><!-- /tab-logistics -->
+
+
+  <!-- ─── TAB 3: INSURANCE ──────────────────────────────────────── -->
+  <div class="tab-pane" id="tab-insurance">
+
+    <div class="section-header">
+      <div class="section-icon"><i class="fas fa-file-contract"></i></div>
+      <h2>保险查询</h2>
+    </div>
+
+    <div class="card" style="margin-bottom:16px;">
+      <div class="query-box">
+        <input type="text" id="policyInput" class="query-input"
+               placeholder="请输入保单号，如 INS-ME-2025-0001"
+               maxlength="20" autocomplete="off" spellcheck="false">
+        <button id="policyBtn" class="query-btn">
+          <i class="fas fa-search"></i> 查询
+        </button>
+      </div>
+      <div class="query-hint">
+        <i class="fas fa-lightbulb" style="color:var(--gold);margin-right:5px;"></i>
+        快速示例（点击直接查询）：
+      </div>
+      <div class="example-chips" id="policyExamples"></div>
+    </div>
+
+    <div id="policyResult"></div>
+
+  </div><!-- /tab-insurance -->
+
+
+  <!-- ─── TAB 4: RISK MAP ───────────────────────────────────────── -->
+  <div class="tab-pane" id="tab-riskmap">
+
+    <div class="section-header">
+      <div class="section-icon"><i class="fas fa-map-marked-alt"></i></div>
+      <h2>中东物流风险地图</h2>
+    </div>
+
+    <div class="riskmap-layout">
+
+      <!-- SVG Map -->
+      <div class="map-wrapper">
+        <svg viewBox="0 0 800 560" xmlns="http://www.w3.org/2000/svg" id="mideastMap">
+
+          <!-- Ocean background -->
+          <rect width="800" height="560" fill="#0a1628"/>
+
+          <!-- Water labels -->
+          <text x="100" y="380" fill="rgba(72,149,189,0.4)" font-size="11" font-family="sans-serif">地 中 海</text>
+          <text x="60"  y="480" fill="rgba(72,149,189,0.4)" font-size="10" font-family="sans-serif">红 海</text>
+          <text x="600" y="400" fill="rgba(72,149,189,0.4)" font-size="11" font-family="sans-serif">阿 拉 伯 海</text>
+          <text x="530" y="260" fill="rgba(72,149,189,0.4)" font-size="11" font-family="sans-serif">波 斯 湾</text>
+
+          <!-- Key waterway lines -->
+          <line x1="155" y1="415" x2="95" y2="500" stroke="rgba(72,149,189,0.25)" stroke-width="12" stroke-linecap="round"/>
+          <text x="110" y="460" fill="rgba(239,68,68,0.6)" font-size="9" font-family="sans-serif" transform="rotate(-45,110,460)">红海航线⚠</text>
+
+          <!-- Suez Canal -->
+          <line x1="155" y1="410" x2="170" y2="380" stroke="rgba(212,160,23,0.5)" stroke-width="3"/>
+          <circle cx="162" cy="395" r="5" fill="none" stroke="rgba(212,160,23,0.8)" stroke-width="1.5"/>
+          <text x="175" y="400" fill="rgba(212,160,23,0.8)" font-size="9" font-family="sans-serif">苏伊士</text>
+
+          <!-- Hormuz -->
+          <circle cx="568" cy="248" r="6" fill="none" stroke="rgba(245,158,11,0.8)" stroke-width="1.5"/>
+          <text x="576" y="244" fill="rgba(245,158,11,0.8)" font-size="9" font-family="sans-serif">霍尔木兹</text>
+
+          <!-- ═══ COUNTRY PATHS ═══ -->
+
+          <!-- Turkey (TR) -->
+          <path class="map-country" data-code="TR"
+            d="M160,80 L240,72 L310,80 L350,90 L370,105 L340,120 L300,118 L270,130 L240,125 L210,118 L180,115 L155,105 Z"
+            fill="#22c55e"/>
+          <text x="240" y="102" fill="white" font-size="10" font-family="sans-serif" text-anchor="middle" pointer-events="none">土耳其</text>
+
+          <!-- Egypt (EG) - including Sinai -->
+          <path class="map-country" data-code="EG"
+            d="M130,380 L165,375 L185,385 L190,420 L185,460 L170,490 L140,495 L120,480 L115,450 L118,420 L115,395 Z"
+            fill="#f59e0b"/>
+          <text x="152" y="435" fill="white" font-size="10" font-family="sans-serif" text-anchor="middle" pointer-events="none">埃及</text>
+
+          <!-- Israel (IL) -->
+          <path class="map-country" data-code="IL"
+            d="M200,360 L218,355 L225,368 L220,395 L210,400 L198,388 L195,372 Z"
+            fill="#f59e0b"/>
+          <text x="210" y="380" fill="white" font-size="8" font-family="sans-serif" text-anchor="middle" pointer-events="none">以色列</text>
+
+          <!-- Jordan (JO) -->
+          <path class="map-country" data-code="JO"
+            d="M225,360 L265,355 L275,375 L268,410 L248,415 L225,400 L222,380 Z"
+            fill="#f59e0b"/>
+          <text x="248" y="388" fill="white" font-size="9" font-family="sans-serif" text-anchor="middle" pointer-events="none">约旦</text>
+
+          <!-- Iraq (IQ) -->
+          <path class="map-country" data-code="IQ"
+            d="M300,170 L370,160 L410,175 L425,210 L418,250 L400,270 L375,285 L350,280 L325,265 L305,245 L295,220 L298,195 Z"
+            fill="#ef4444"/>
+          <text x="358" y="228" fill="white" font-size="10" font-family="sans-serif" text-anchor="middle" pointer-events="none">伊拉克</text>
+
+          <!-- Syria / Lebanon area -->
+          <path class="map-country" data-code="JO"
+            d="M270,145 L320,138 L335,155 L315,168 L285,165 L268,155 Z"
+            fill="#f59e0b" opacity="0.6"/>
+
+          <!-- Saudi Arabia (SA) -->
+          <path class="map-country" data-code="SA"
+            d="M230,410 L280,415 L340,405 L390,415 L435,430 L465,445 L468,475 L455,505 L430,520 L390,525 L350,520 L310,510 L275,495 L250,478 L232,458 L225,435 Z"
+            fill="#f59e0b"/>
+          <text x="345" y="472" fill="white" font-size="11" font-family="sans-serif" text-anchor="middle" pointer-events="none">沙特阿拉伯</text>
+
+          <!-- Kuwait (KW) -->
+          <path class="map-country" data-code="KW"
+            d="M420,280 L445,275 L455,288 L450,305 L430,308 L415,298 Z"
+            fill="#22c55e"/>
+          <text x="435" y="294" fill="white" font-size="8" font-family="sans-serif" text-anchor="middle" pointer-events="none">科威特</text>
+
+          <!-- UAE (AE) -->
+          <path class="map-country" data-code="AE"
+            d="M505,335 L545,328 L570,340 L565,360 L548,370 L520,368 L502,355 Z"
+            fill="#22c55e"/>
+          <text x="535" y="352" fill="white" font-size="9" font-family="sans-serif" text-anchor="middle" pointer-events="none">阿联酋</text>
+
+          <!-- Qatar (QA) -->
+          <path class="map-country" data-code="QA"
+            d="M492,315 L505,310 L510,322 L505,336 L492,335 Z"
+            fill="#22c55e"/>
+          <text x="501" y="326" fill="white" font-size="7" font-family="sans-serif" text-anchor="middle" pointer-events="none">卡塔尔</text>
+
+          <!-- Bahrain area (part of AE display) -->
+
+          <!-- Oman (OM) -->
+          <path class="map-country" data-code="OM"
+            d="M572,330 L610,310 L640,325 L650,360 L640,395 L620,415 L598,410 L580,395 L570,370 L568,348 Z"
+            fill="#22c55e"/>
+          <text x="605" y="368" fill="white" font-size="10" font-family="sans-serif" text-anchor="middle" pointer-events="none">阿曼</text>
+
+          <!-- Iran (IR) -->
+          <path class="map-country" data-code="IR"
+            d="M420,100 L480,88 L540,92 L590,110 L620,140 L615,175 L600,205 L575,225 L545,235 L515,240 L485,235 L458,220 L438,200 L425,175 L418,150 Z"
+            fill="#ef4444"/>
+          <text x="520" y="165" fill="white" font-size="11" font-family="sans-serif" text-anchor="middle" pointer-events="none">伊朗</text>
+
+          <!-- Yemen (YE) -->
+          <path class="map-country" data-code="YE"
+            d="M255,495 L310,510 L380,520 L440,518 L455,505 L460,480 L450,462 L410,455 L365,448 L320,448 L280,455 L258,470 Z"
+            fill="#dc2626"/>
+          <text x="355" y="490" fill="white" font-size="10" font-family="sans-serif" text-anchor="middle" pointer-events="none">也门 ⚠</text>
+
+          <!-- Afghanistan area (partial) -->
+          <path d="M630,85 L700,80 L740,100 L730,140 L700,155 L660,148 L630,130 L620,108 Z"
+            fill="rgba(90,120,160,0.3)" stroke="rgba(200,216,240,0.15)" stroke-width="0.8"/>
+          <text x="676" y="118" fill="rgba(180,200,220,0.5)" font-size="9" font-family="sans-serif" text-anchor="middle">阿富汗</text>
+
+          <!-- Pakistan (partial) -->
+          <path d="M640,155 L720,145 L760,170 L755,220 L720,240 L680,245 L650,230 L638,205 L635,180 Z"
+            fill="rgba(90,120,160,0.3)" stroke="rgba(200,216,240,0.15)" stroke-width="0.8"/>
+          <text x="700" y="195" fill="rgba(180,200,220,0.5)" font-size="9" font-family="sans-serif" text-anchor="middle">巴基斯坦</text>
+
+          <!-- Djibouti area -->
+          <path d="M192,505 L210,500 L215,512 L205,520 L192,515 Z"
+            fill="rgba(90,120,160,0.5)" stroke="rgba(200,216,240,0.2)" stroke-width="0.8"/>
+
+          <!-- Libya (partial) -->
+          <path d="M30,360 L110,352 L120,370 L118,440 L100,450 L50,445 L20,430 L15,400 Z"
+            fill="rgba(90,120,160,0.3)" stroke="rgba(200,216,240,0.15)" stroke-width="0.8"/>
+          <text x="65" y="408" fill="rgba(180,200,220,0.5)" font-size="9" font-family="sans-serif" text-anchor="middle">利比亚</text>
+
+          <!-- Sudan area -->
+          <path d="M115,460 L170,460 L178,490 L170,530 L140,540 L115,535 L105,510 L108,480 Z"
+            fill="rgba(90,120,160,0.3)" stroke="rgba(200,216,240,0.15)" stroke-width="0.8"/>
+          <text x="142" y="500" fill="rgba(180,200,220,0.5)" font-size="9" font-family="sans-serif" text-anchor="middle">苏丹</text>
+
+          <!-- Greece/Cyprus label -->
+          <text x="95" y="320" fill="rgba(180,200,220,0.5)" font-size="9" font-family="sans-serif">地中海岛屿</text>
+
+          <!-- Key route arrows -->
+          <defs>
+            <marker id="arrowGold" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+              <path d="M0,0 L6,3 L0,6 Z" fill="rgba(212,160,23,0.5)"/>
+            </marker>
+          </defs>
+
+          <!-- Route: Red Sea to Persian Gulf -->
+          <path d="M115,480 Q180,460 220,435 Q280,410 350,380 Q430,345 490,320 Q530,305 560,255"
+            fill="none" stroke="rgba(212,160,23,0.3)" stroke-width="1.5" stroke-dasharray="6,4"
+            marker-end="url(#arrowGold)"/>
+
+        </svg>
+
+        <div class="map-legend">
+          <div class="legend-item">
+            <div class="legend-dot" style="background:#22c55e;"></div> 低风险
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot" style="background:#f59e0b;"></div> 中风险
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot" style="background:#ef4444;"></div> 高风险
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot" style="background:#dc2626;"></div> 极高风险
+          </div>
+          <div class="legend-item" style="margin-left:auto;font-size:11px;color:var(--text-muted);">
+            <i class="fas fa-hand-pointer" style="margin-right:5px;color:var(--gold);"></i>
+            点击国家查看详情
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="sidebar">
+
+        <!-- Chokepoints -->
+        <div class="card">
+          <div class="card-title"><i class="fas fa-water"></i> 关键航道状态</div>
+          <div id="chokepointList"></div>
+        </div>
+
+        <!-- Country Risk List -->
+        <div class="card">
+          <div class="card-title"><i class="fas fa-flag"></i> 国家风险排名</div>
+          <div style="font-size:10px;color:var(--text-muted);margin-bottom:8px;padding:0 4px;display:flex;justify-content:space-between;">
+            <span>国家</span>
+            <span>承保率 &nbsp; 风险</span>
+          </div>
+          <div id="countryRiskList"></div>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- /tab-riskmap -->
+
+</main><!-- /main -->
+
+
+<!-- ═══ MAP TOOLTIP ═══════════════════════════════════════════════ -->
+<div id="mapTooltip"></div>
+
+<!-- ═══ COUNTRY DETAIL PANEL ═════════════════════════════════════ -->
+<div class="country-detail-panel" id="countryDetailPanel">
+  <button class="panel-close-btn" onclick="closeCountryDetail()">
+    <i class="fas fa-times"></i>
+  </button>
+  <div id="countryDetailContent"></div>
+</div>
+
+
+<!-- ═══ FOOTER ═══════════════════════════════════════════════════ -->
+<footer>
+  <span>中东国际物流保障险需求分析平台</span> &nbsp;·&nbsp; 数据仅供展示，不构成投保建议 &nbsp;·&nbsp; © 2025
+</footer>
+
+
+<!-- ═══ SCRIPTS ══════════════════════════════════════════════════ -->
+<script src="js/data.js"></script>
+<script src="js/charts.js"></script>
+<script src="js/logistics.js"></script>
+<script src="js/insurance.js"></script>
+<script src="js/app.js"></script>
+
+<script>
+  // Live clock
+  function updateClock() {
+    const now = new Date();
+    document.getElementById('currentDate').textContent =
+      now.toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' });
+    document.getElementById('currentTime').textContent =
+      now.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  }
+  updateClock();
+  setInterval(updateClock, 1000);
+</script>
+
+</body>
+</html>

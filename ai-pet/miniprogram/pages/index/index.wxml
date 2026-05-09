@@ -1,0 +1,102 @@
+<!-- pages/index/index.wxml — 宠物主界面 -->
+<view class="page-container">
+
+  <!-- 加载中 -->
+  <view wx:if="{{loading}}" class="loading-wrap">
+    <image src="/images/loading.gif" style="width:80rpx;height:80rpx;" />
+    <text>加载中...</text>
+  </view>
+
+  <!-- 无宠物 → 引导创建 -->
+  <view wx:elif="{{!pet}}" class="empty-wrap">
+    <image src="/images/empty-pet.png" style="width:240rpx;height:240rpx;" />
+    <text>还没有数字宠物哦</text>
+    <button class="btn-primary" style="margin-top:40rpx;width:320rpx;" bindtap="goUpload">
+      上传宠物照片
+    </button>
+  </view>
+
+  <!-- 有宠物 → 主界面 -->
+  <block wx:else>
+
+    <!-- 宠物头像 + 情绪 -->
+    <view class="pet-hero">
+      <view class="pet-avatar-wrap" bindtap="onAvatarTap">
+        <image
+          src="{{pet.stylizedImageUrl || pet.originalImageUrl}}"
+          class="pet-avatar {{mood}}"
+          mode="aspectFill"
+        />
+        <!-- AI 处理中遮罩 -->
+        <view wx:if="{{pet.imageStatus === 'processing' || pet.imageStatus === 'pending'}}"
+              class="pet-avatar-overlay">
+          <image src="/images/loading.gif" style="width:48rpx;height:48rpx;" />
+          <text>正在施魔法...</text>
+        </view>
+        <!-- AI 失败遮罩 -->
+        <view wx:elif="{{pet.imageStatus === 'failed'}}" class="pet-avatar-overlay overlay-error">
+          <text>生成失败</text>
+          <text class="retry-text" bindtap="retryAiGenerate">点击重试</text>
+        </view>
+      </view>
+
+      <view class="pet-info">
+        <text class="pet-name">{{pet.name}}</text>
+        <text class="pet-mood {{mood}}">{{moodEmoji}} {{moodText}}</text>
+      </view>
+    </view>
+
+    <!-- 属性进度条 -->
+    <view class="card">
+      <view class="stat-bar-wrap">
+        <view class="stat-bar-label">
+          <text>🍖 饱食度</text>
+          <text>{{stats.satiety}}</text>
+        </view>
+        <view class="stat-bar-bg">
+          <view class="stat-bar-fill satiety" style="width:{{satietyWidth}}"></view>
+        </view>
+      </view>
+      <view class="stat-bar-wrap">
+        <view class="stat-bar-label">
+          <text>🛁 清洁度</text>
+          <text>{{stats.cleanliness}}</text>
+        </view>
+        <view class="stat-bar-bg">
+          <view class="stat-bar-fill cleanliness" style="width:{{cleanlinessWidth}}"></view>
+        </view>
+      </view>
+      <view class="stat-bar-wrap" style="margin-bottom:0">
+        <view class="stat-bar-label">
+          <text>💗 快乐度</text>
+          <text>{{stats.happiness}}</text>
+        </view>
+        <view class="stat-bar-bg">
+          <view class="stat-bar-fill happiness" style="width:{{happinessWidth}}"></view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 互动按钮 -->
+    <view class="card interact-grid">
+      <view
+        wx:for="{{interactButtons}}"
+        wx:key="type"
+        class="interact-btn {{item.disabled ? 'disabled' : ''}}"
+        style="background:{{item.disabled ? '' : item.color}}10; border-color:{{item.disabled ? '' : item.color}};"
+        bindtap="onInteract"
+        data-type="{{item.type}}"
+      >
+        <text class="interact-emoji">{{item.emoji}}</text>
+        <text class="interact-label" style="color:{{item.disabled ? '' : item.color}}">
+          {{item.label}}
+        </text>
+        <text class="interact-count" style="color:{{item.disabled ? '' : item.color}}">
+          {{item.todayCount}}/{{item.limit}}
+        </text>
+      </view>
+    </view>
+
+  </block>
+
+</view>

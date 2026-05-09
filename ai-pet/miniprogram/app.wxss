@@ -1,0 +1,133 @@
+/* app.wxss — 全局样式 */
+
+/* ── 颜色变量（通过 page 根节点注入） ─────────────────────── */
+page {
+  --color-primary:    #FF8FAB;   /* 主色：粉红 */
+  --color-primary-lt: #FFD6E0;   /* 主色浅版：背景/tag */
+  --color-accent:     #FFB347;   /* 暖橙：喂食按钮 */
+  --color-bg:         #FFF5F7;   /* 页面背景 */
+  --color-card:       #FFFFFF;   /* 卡片背景 */
+  --color-text:       #333333;   /* 主文字 */
+  --color-text-sub:   #999999;   /* 次级文字 */
+  --color-border:     #F0E0E6;   /* 边框 */
+  --color-danger:     #FF4D6D;   /* 错误/警告 */
+  --color-success:    #52C41A;   /* 成功 */
+  --color-disabled:   #CCCCCC;   /* 禁用态 */
+
+  background-color: var(--color-bg);
+  font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  font-size: 28rpx;
+  color: var(--color-text);
+  box-sizing: border-box;
+}
+
+/* ── 通用布局 ──────────────────────────────────────────────── */
+.page-container {
+  min-height: 100vh;
+  background: var(--color-bg);
+  padding: 0 0 120rpx;   /* 底部留出 tabBar 空间 */
+}
+
+.card {
+  background: var(--color-card);
+  border-radius: 24rpx;
+  padding: 32rpx;
+  margin: 24rpx 32rpx;
+  box-shadow: 0 4rpx 20rpx rgba(255, 143, 171, 0.08);
+}
+
+/* ── 按钮 ──────────────────────────────────────────────────── */
+.btn-primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-primary);
+  color: #FFFFFF;
+  font-size: 30rpx;
+  font-weight: 600;
+  border-radius: 48rpx;
+  padding: 24rpx 48rpx;
+  border: none;
+  transition: opacity 0.15s;
+}
+
+.btn-primary:active {
+  opacity: 0.8;
+}
+
+.btn-primary[disabled],
+.btn-primary.disabled {
+  background: var(--color-disabled);
+  color: #FFFFFF;
+}
+
+.btn-outline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: var(--color-primary);
+  font-size: 28rpx;
+  border: 2rpx solid var(--color-primary);
+  border-radius: 48rpx;
+  padding: 20rpx 40rpx;
+}
+
+/* ── 状态栏（宠物属性进度条）─────────────────────────────── */
+.stat-bar-wrap {
+  margin-bottom: 20rpx;
+}
+
+.stat-bar-label {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8rpx;
+  font-size: 24rpx;
+  color: var(--color-text-sub);
+}
+
+.stat-bar-bg {
+  height: 12rpx;
+  background: var(--color-border);
+  border-radius: 6rpx;
+  overflow: hidden;
+}
+
+.stat-bar-fill {
+  height: 100%;
+  border-radius: 6rpx;
+  transition: width 0.4s ease;
+}
+
+.stat-bar-fill.satiety    { background: linear-gradient(90deg, #FFB347, #FFD700); }
+.stat-bar-fill.cleanliness{ background: linear-gradient(90deg, #74C0FC, #4DABF7); }
+.stat-bar-fill.happiness  { background: linear-gradient(90deg, #FF8FAB, #FF6B9D); }
+
+/* ── 情绪颜色（宠物状态低时提示色）───────────────────────── */
+.mood-happy  { color: #52C41A; }
+.mood-normal { color: #FFB347; }
+.mood-sad    { color: var(--color-danger); }
+
+/* ── 加载态 ────────────────────────────────────────────────── */
+.loading-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 80rpx 0;
+  color: var(--color-text-sub);
+  font-size: 26rpx;
+}
+
+/* ── 空态 ──────────────────────────────────────────────────── */
+.empty-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 120rpx 0;
+  color: var(--color-text-sub);
+}
+
+.empty-wrap text {
+  margin-top: 24rpx;
+  font-size: 28rpx;
+}
